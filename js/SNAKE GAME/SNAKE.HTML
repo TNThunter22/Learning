@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SNAILGAME??????</title>
+</head>
+<body>
+<script src="http://code.jquery.com/jquery-3.5.0.js"></script>
+<canvas id="canvas" width="600" height="600"></canvas>
+<script>
+//setup
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+var width = canvas.width;
+var height = canvas.height;
+var pause = false;
+var gameOvercheck = false;
+
+
+//size of snake
+var blockSize = 15;
+var widthInBlocks = width / blockSize
+var heightInBlocks = height / blockSize
+
+
+//circleSetup
+var circle = function(x,y,radius,fillcircle) {
+ctx.beginPath();
+ctx.arc(x,y,radius,0,Math.PI * 2,false);
+if (fillcircle){
+ctx.fill();
+}else{
+ctx.stroke();
+}
+};
+
+
+//score counter
+var score  = 0;
+
+var drawScore = function () {
+ctx.font = "20px Courier";
+ctx.fillStyle = "Black"
+ctx.textAlign = "left";
+ctx.textBaseline = "top"
+ctx.fillText("Score: "+ score,blockSize,blockSize);
+};
+
+
+//border of canvas
+
+var drawBorder = function () {
+ctx.fillStyle = "DarkGray"
+ctx.fillRect(0,0,width,blockSize);
+ctx.fillRect(0,height - blockSize,width,blockSize);
+ctx.fillRect(0,0,blockSize,height);
+ctx.fillRect(width - blockSize,0,blockSize,height);
+};
+
+
+//game over
+var gameOver = function () {
+gameOvercheck = true;
+ctx.font = "60px Courier"
+ctx.fillStyle = "Black"
+ctx.textAlign = "center"
+ctx.textBaseline = "middle";
+ctx.fillText("GAME OVER",width / 2,height / 2)
+};
+
+
+//Blocks
+var Block = function(col, row){
+this.col = col
+this.row = row
+};
+
+
+//drawSquare
+Block.prototype.drawSquare = function(color){
+var x = this.col * blockSize
+var y = this.row * blockSize
+ctx.fillStyle = color;
+ctx.fillRect(x,y,blockSize,blockSize);
+};
+
+
+//drawcircle
+Block.prototype.drawCircle = function (color){
+var centerX = this.col * blockSize + blockSize / 2;
+var centerY = this.row * blockSize + blockSize / 2;
+ctx.fillStyle = color;
+circle(centerX,centerY,blockSize / 2,true);
+}
+
+
+//crashcheck
+Block.prototype.equal = function(otherblock){
+return this.col === otherblock.col && this.row === otherblock.row;
+};
+
+
+//snakeStartform
+var Snake = function(){
+this.segments = [
+new Block(7,5),
+new Block(6,5),
+new Block(5,5)
+];
+//direction
+this.direction = "right"
+this.nextdirection = "right"
+};
+
+
+//SnakeDraw
+Snake.prototype.draw = function () { 
+this.segments[0].drawSquare("Red");
+for(var i = 1;i < this.segments.length; i++){
+if(i%2 === 0){
+this.segments[i].drawSquare("Blue");
+}else{
+this.segments[i].drawSquare("Yellow");
+}
+}
+this.segments[this.segments.length - 1].drawSquare("Black");
+this.draweye()
+}
+
+
+Snake.prototype.draweye = function () { 
+var head = this.segments[0];
+var centerX = head.col * blockSize + blockSize / 2;
+var centerY = head.row * blockSize + blockSize / 2;
+ctx.fillStyle = "Yellow";
+circle(centerX,centerY,2,true);
+}
+
+
+//move
+Snake.prototype.move = function () {
+if (pause){
+return;
+}
+var head = this.segments[0]
+var newHead;
+this.direction = this.nextdirection;
+if (this.direction === "right"){
+newHead = new Block(head.col + 1,head.row);
+}else if (this.direction === "left"){
+newHead = new Block(head.col - 1,head.row);
+}else if (this.direction === "down"){
+newHead = new Block(head.col,head.row + 1);
+}else if (this.direction === "up"){
+newHead = new Block(head.col,head.row - 1);
+}
+if (this.checkCollision(newHead)){ 
+gameOver();
+return;
+}
+this.segments.unshift(newHead);
+if (newHead.equal(apple.position)){
+score++
+apple.move();
+while(apple.checkCollision(this.segments)){
+apple.move();
+}
+animationTime--
+}else{
+this.segments.pop();
+}
+}
+
+
+
+
+
+//checkCollision
+Snake.prototype.checkCollision = function(head){
+var leftcollision = (head.col === 0);
+var topcollision = (head.row === 0);
+var rightcollision = (head.col === widthInBlocks - 1);	
+var bottomcollision = (head.row === widthInBlocks - 1);	
+var wallcollision = leftcollision || topcollision || rightcollision || bottomcollision;
+var selfcollision = false;
+for (var i = 0; i < this.segments.length; i++){
+if (head.equal(this.segments[i])){
+selfcollision = true;
+}
+}
+return wallcollision || selfcollision
+};
+
+
+//keyId
+var direction = {
+32: "stop", //space
+65: "left",  //a
+83: "down" , //s
+87: "up" , //w
+68: "right" , //d _ arrow keys
+37: "left",  
+40: "down" , 
+38: "up" , 
+39: "right" , 
+};
+
+
+//keydown
+$("body").keydown(function(event){
+var newDirection = direction[event.keyCode];
+ if (newDirection === "stop"){
+pause = !pause;
+}
+if (newDirection !== undefined && newDirection !== "stop"){
+snake.setDirection(newDirection)
+};
+});
+
+
+//setDirection
+Snake.prototype.setDirection = function(newDirection){
+if (this.direction === "up" && newDirection === "down"){
+return;
+}else if (this.direction === "down" && newDirection === "up"){
+return;
+}else if (this.direction === "left" && newDirection === "right"){
+return;
+}else if (this.direction === "right" && newDirection === "left"){
+return;
+};
+this.nextdirection = newDirection
+};
+
+
+//Applecreate
+var Apple = function (){
+this.position = new Block(10,10)
+};
+
+
+//AppleDraw
+Apple.prototype.draw = function () {
+this.position.drawCircle("LimeGreen");
+};
+
+
+//Apple move
+Apple.prototype.move = function() {
+var randomCol = Math.floor(Math.random() * (widthInBlocks - 2)) + 1;
+var randomRow = Math.floor(Math.random() * (heightInBlocks - 2)) + 1;
+this.position = new Block(randomCol,randomRow);
+};
+
+
+//
+Apple.prototype.checkCollision = function (segments){
+for(var i = 0;i < segments.length; i++){
+if (apple.position.equal(segments[i])){
+return true;
+}
+}
+return false;
+}
+
+//create Snake & Apple
+var snake = new Snake();
+var apple = new Apple();
+
+
+//IntervalId
+var animationTime = 100
+var gameLoop = function(){
+if (gameOvercheck){
+return;
+}
+ctx.clearRect(0,0,width,height);
+drawScore();
+snake.move();
+snake.draw();
+apple.draw();
+drawBorder();
+setTimeout(gameLoop,animationTime)
+}
+gameLoop();
+</script>
+</body>
+</html>
