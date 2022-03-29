@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Olympiaden Programmieren</title> <br>
+</head>
+<body>
+
+
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+
+
+
+<script>
+function showData(){
+	var hours = document.getElementById("inputh").value;
+	var minutes = document.getElementById("inputmin").value;
+	var nextTurn = (720 * Number(hours) / 11) - (60 * Number(hours) + Number(minutes));
+	if (nextTurn < 0){
+		nextTurn= nextTurn + 720/11;
+	}
+	document.writeln("<h1>Your Input</h1><br>");
+	document.writeln("Thank you for completing this form.<br><br>");
+	document.writeln("Your Hours " + hours + "<br>");
+	document.writeln("Your Minutes " + minutes + "<br>");
+	document.writeln("Your Next Period " + Math.round(nextTurn));
+}
+	
+
+</script>
+<h1 id='header'>Olympiaden Programmieren</h1>
+
+<form name="myform" action="" method="get">
+    Stunden: <br>
+		<input type="text" id="inputh"/> <br>
+    Minuten: <br>
+		<input type="text" id="inputmin"/>
+		<input type="submit" value="Submit" onclick="showData()"/><br>
+</form>
+<h1 name= result> </h1><br>
+
+<header>
+
+</header>
+
+
+
+
+</body>
+</html>
