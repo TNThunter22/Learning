@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Olympiaden Programmieren</title> <br>
+</head>
+<body>
+
+
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+
+
+
+<script>
+function showData(){
+	var inputNum = Number(document.getElementById("input").value)
+	if(inputNum > 2000 || inputNum < 1){
+		alert("Error: Input is greater than 200!");
+		return;
+	}else{ 
+		for (i = 0;i < inputNum;i++){
+			var currentNum = i  + 1;
+			document.writeln(currentNum);
+
+			for(j = 1  ; j < inputNum ; j++){
+				if(currentNum % inputNum == 0){
+				
+					currentNum = currentNum + 1;
+					
+				}else{
+					currentNum = currentNum + inputNum + 1;
+
+				}
+				document.writeln( " " + currentNum);
+			}
+			document.writeln("<br>");
+
+		}
+	}
+}
+</script>
+<h1 id='header'>Olympiaden Programmieren</h1>
+
+<form name="myform" action="" method="get">
+    Wählen sie eine Zahl von 1 - 200 aus: <br>
+		<input type="text" id="input"/> <br>
+		<input type="submit" value="Submit" onclick="showData()"/><br>
+</form>
+<h1 name= result> </h1><br>
+
+<header>
+
+</header>
+
+
+
+
+</body>
+</html>
