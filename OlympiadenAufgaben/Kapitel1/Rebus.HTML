@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Olympiaden Programmieren</title> <br>
+</head>
+<body>
+
+
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+
+
+
+<script>
+var word1;
+var word2;
+var summ;
+var counter = 0;
+var uniqueLetters;
+
+function showData(){
+	counter = 0;
+	word1 = document.getElementById("input1").value;
+	word2 = document.getElementById("input2").value;
+	summ = document.getElementById("summ").value;
+	if(word1 === ""	|| word2 === "" || summ === ""){
+		alert("Error: Atleast one Input is Missing");
+		return;
+	}
+	uniqueLetters = getUnique();
+	var answerArray = new Array();
+	assignCombinations(answerArray)
+	document.writeln("Possible Combinations " + counter);
+}
+
+
+function check(word1,word2,summ){
+	if(word1 + word2 == summ){
+		document.writeln(word1 + " + " + word2 + " =  " + summ + "</br>");
+		counter++;
+	}
+}
+
+
+function getUnique(){
+	var uniqueLetters = new Array();
+	var allWords = word1 + word2 + summ;
+	for(var j = 0; j < allWords.length;j++){
+		var currentletter = allWords.charAt(j);
+		if(!uniqueLetters.includes(currentletter)){
+			uniqueLetters.push(currentletter);
+		}
+	}
+	return uniqueLetters;
+}
+
+
+
+function assignCombinations(array){
+	if (uniqueLetters.length == array.length){
+		insertNumInWords(array);
+		
+	}else{
+	
+		for(var i = 0;i < 10;i++){	
+			if (i == 0 && array.length < 2){
+				continue;
+			}
+			if (!array.includes(i) ){
+				array.push(i);
+				assignCombinations(array);
+				array.pop();
+			}
+		}
+	}
+}
+
+
+
+
+function insertNumInWords(array){
+	var num1 = insertNumInWord(word1,array);
+	var num2 = insertNumInWord(word2,array);
+	var numsumm = insertNumInWord(summ,array);
+	check(num1,num2,numsumm);
+
+
+
+}
+function insertNumInWord(word,array){
+	var answ = 0;
+	outer:	for(var i = 0;i < word.length;i++){
+				for(var j = 0 ; j < array.length;j++){
+					if (uniqueLetters[j] == word[i]){
+						answ *= 10;
+						answ += array[j];
+						continue outer;
+					}
+				}
+			}
+			return answ;
+}
+
+
+
+
+
+
+</script>
+<h1 id='header'>Olympiaden Programmieren</h1>
+
+<form name="myform" action="" method="get">
+    Input 1: <br>
+		<input type="text" id="input1" value= "volvo"/> <br>
+    Input 2: <br>
+		<input type="text" id="input2" value="fiat"/> <br>
+	Summe: <br>
+		<input type="text" id="summ" value="motor"/>
+		<input type="submit" value="Submit" onclick="showData()"/><br>
+</form>
+<h1 name= result> </h1><br>
+
+<header>
+
+</header>
+
+
+
+
+</body>
+</html>
