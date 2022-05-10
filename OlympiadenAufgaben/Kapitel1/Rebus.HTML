@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,11 +13,83 @@
 
 
 <script>
+var wordArray;
+
 var word1;
 var word2;
 var summ;
 var counter = 0;
 var uniqueLetters;
+var temp = 0;
+
+
+
+
+
+function getRebus(){
+	wordArray = randomWordFromInternet();
+	do{
+		temp++;
+		counter = 0;
+		word1 = randomLetterWord(4);
+		word2 = randomLetterWord(5);
+		summ = randomLetterWord(5);
+		if(word1.length <= 1 || word2.length <= 1 || summ.length <= 1){
+			break;
+		}
+		uniqueLetters = getUnique();
+		if(uniqueLetters.length > 10){
+			continue;
+		}
+		var answerArray = new Array();
+		assignCombinations(answerArray)
+		console.log(word1 + " "  + word2 + " " + summ + " " + temp + " " +counter);
+		
+	}while(counter != 1)
+	document.open();
+	document.writeln(word1 + " "  + word2 + " " + summ + " " + temp);
+}
+
+
+function check(word1,word2,summ){
+	if(word1 + word2 == summ){
+		document.writeln(word1 + " + " + word2 + " =  " + summ + "</br>");
+		counter++;
+	}
+}
+
+
+
+
+
+var randomWordFromInternet = function (){
+	var wordArray = "";
+	var r = new XMLHttpRequest();
+	r.open('GET', 'https://random-word-api.herokuapp.com/word?number=9999', false ); //gets list of 1000 random words
+	r.send(null);
+	if (r.status === 200) {
+		wordArray = JSON.parse(r.responseText);
+	}
+	return wordArray; //sends the 1000 words back
+}
+
+
+
+var randomLetterWord = function(length) {
+	var Word3Letter = "";
+
+	for (var i = 0;i < wordArray.length;i++){
+		var wordFromArray = wordArray[i];
+		if (wordFromArray.length == length){
+			Word3Letter += wordFromArray;
+			wordArray[i] ="";
+			break;
+		}
+	}
+	return Word3Letter;
+}
+
+
 
 function showData(){
 	counter = 0;
@@ -34,12 +107,7 @@ function showData(){
 }
 
 
-function check(word1,word2,summ){
-	if(word1 + word2 == summ){
-		document.writeln(word1 + " + " + word2 + " =  " + summ + "</br>");
-		counter++;
-	}
-}
+
 
 
 function getUnique(){
@@ -57,6 +125,7 @@ function getUnique(){
 
 
 function assignCombinations(array){
+	if(counter > 1 )return;
 	if (uniqueLetters.length == array.length){
 		insertNumInWords(array);
 		
@@ -117,6 +186,7 @@ function insertNumInWord(word,array){
 	Summe: <br>
 		<input type="text" id="summ" value="motor"/>
 		<input type="submit" value="Submit" onclick="showData()"/><br>
+		<input type="submit" value="Get a Rebus" onclick="getRebus()"/><br>
 </form>
 <h1 name= result> </h1><br>
 
