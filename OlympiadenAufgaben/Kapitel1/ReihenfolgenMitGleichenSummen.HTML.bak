@@ -13,7 +13,7 @@
 
 <script>
 function showData(){
-	var inputNum = Number(document.getElementById("input").value);
+	var inputNum = Number(document.getElementById("input").value)
 	if(inputNum > 2000 || inputNum < 1){
 		alert("Error: Input is greater than 200!");
 		return;
