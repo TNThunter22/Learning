@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>getPrimes</title>
+ 
+    <script src="textbox.js" type="text/javascript"></script>
+</head>
+<body>
+ <script>
+function showData(){
+	var inputNum = Number(document.getElementById("input").value);
+	var Num = inputNum;
+	if(!isNaN(inputNum)){
+	var counter = 0;
+		document.writeln("The Factors of your Number Are: ")
+		for(i = 2;i <= Math.floor(Math.sqrt(inputNum)); i++){
+			if(!(Num % i > 0)){
+				document.writeln(i + " * ");
+				Num /= i;
+				counter++;
+			}
+		}
+		document.writeln(Num);
+
+	}else{
+		alert("NaN");
+		return;
+	}
+}
+
+
+
+ </script>
+ 
+ 
+ 
+ 
+ 
+<form name="myform" action="" method="get">
+    How many Prime Numbers do you want to have: <br>
+<input type="text" id="input"/> <br>
+<input type="button" name="button" value="Submit" onclick="showData()"/>
+</form>
+ 
+</body>
