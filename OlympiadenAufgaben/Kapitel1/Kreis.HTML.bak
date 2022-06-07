@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Olympiaden Programmieren</title> <br>
+</head>
+<body>
+
+
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+
+<h1 id='header'>Olympiaden Programmieren</h1>
+
+<form id="myForm" action="" method="get">
+    Radius: <br>
+		<input type="text" id="inputr"/> 
+		<input type="submit" value="Submit" onclick="showData()"/><br>
+<input type="checkbox" id="accept" name="accept" value="yes">  
+<label for="accept"> Accept </label>
+</form>
+<canvas id="canvas" width="800" height="800"></canvas>
+
+<script>
+	var counter = 0;
+var radius = document.getElementById("inputr").value;
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+var width = canvas.width;
+var height = canvas.height;
+var blockSize = 5;
+var numofLines ;
+	var spacing ;  
+$("#myForm").submit(function(e){
+	e.preventDefault();
+});
+
+var drawScore = function (Answer) {
+ctx.font = "20px Courier";
+ctx.fillStyle = "Black"
+ctx.textAlign = "left";
+ctx.textBaseline = "top"
+ctx.fillText("Points within Circle:"+ Answer,blockSize,blockSize);
+};
+
+
+var drawBorder = function () {
+ctx.lineWidth = 1;
+ctx.fillStyle = "Black"
+ctx.fillRect(0,0,width,blockSize);
+ctx.fillRect(0,height - blockSize,width,blockSize);
+ctx.fillRect(0,0,blockSize,height);
+ctx.fillRect(width - blockSize,0,blockSize,height);
+};
+
+var drawCheckers = function(){
+	numofLines = (radius *2)+ 4;
+	spacing =  width / numofLines;
+	
+	for(i = 0; i < numofLines; i++){ // vertical Lines
+	ctx.beginPath();
+	ctx.lineWidth = 1;
+		ctx.moveTo(spacing * i,0)
+		ctx.lineTo(spacing * i,height)
+		ctx.stroke();
+	}
+	for(i = 0; i < numofLines; i++){ // horizontal Lines
+	ctx.beginPath();
+	ctx.lineWidth = 1;
+		ctx.moveTo(0,spacing * i)
+		ctx.lineTo(width,spacing * i)
+		ctx.stroke();
+	}
+}
+
+
+
+
+var circle = function(x,y,diameter,fillcircle) {
+ctx.beginPath();
+ctx.arc(x,y,diameter,0,Math.PI * 2,false);
+if (fillcircle){
+ctx.fill();
+}else{
+ctx.stroke();
+}
+};
+
+
+function showData(){
+	var counter = 0;
+	const context = canvas.getContext('2d');
+	context.clearRect(0, 0, canvas.width, canvas.height);
+	radius = document.getElementById("inputr").value;
+	ctx.fillStyle = "Red";
+	circle(width / 2, height / 2,blockSize,true); //center
+	ctx.fillStyle = "Black";
+	drawCheckers();
+	drawBorder();
+	circle(width / 2, height / 2,radius * spacing  ,false);
+	if(document.getElementById("accept").checked){
+		getAnswerIntersections();
+		counter *= 4;
+	}else{
+		getAnswer();
+		counter *= 4;
+		counter++;
+	}
+	drawScore(counter);
+
+}
+	
+function getAnswer(){
+
+	for(var i = 0;i <= radius;i++){
+		var isSpace = true;
+		var j = 1;
+		while(isSpace){
+			 if(i *i+ j*j <= radius * radius){
+				ctx.fillStyle = "Blue";
+				circle(width / 2 + spacing * j, height / 2 + spacing * i,blockSize,true); // righ bottom
+				circle(width / 2 + spacing * i, height / 2 - spacing * j,blockSize,true); // left bottom
+				circle(width / 2 - spacing * i, height / 2 + spacing * j,blockSize,true); // right top
+				circle(width / 2 - spacing * j, height / 2 - spacing * i,blockSize,true); // righ bottom
+				counter++;
+			}
+			if(j > radius){
+				isSpace = false;
+			}
+			j++;
+		}
+	}
+	return counter;
+}
+function getAnswerIntersections(){
+	for(var i = 0;i <= radius;i++){
+		var isSpace = true;
+		var j = 1;
+		while(isSpace){
+			 if(i *i+ j*j == radius * radius){
+				ctx.fillStyle = "Blue";
+				circle(width / 2 + spacing * j, height / 2 + spacing * i,blockSize,true); // righ bottom
+				circle(width / 2 + spacing * i, height / 2 + spacing * j,blockSize,true); // left bottom
+				circle(width / 2 - spacing * i, height / 2 - spacing * j,blockSize,true); // right top
+				circle(width / 2 - spacing * j, height / 2 - spacing * i,blockSize,true); // righ bottom
+
+				counter++;
+			}
+			if(j > radius){
+				isSpace = false;
+			}
+			j++;
+		}
+	}
+	return counter;
+}
+</script>
+
+
+<header>
+
+</header>
+
+
+
+
+</body>
+</html>
