@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Olympiaden Programmieren</title> <br>
+</head>
+<body>
+
+
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+
+<h1 id='header'>Olympiaden Programmieren</h1>
+
+<form id="myForm" action="" method="get">
+    Width: <br>
+		<input type="text" id="inputw"/><br>
+    Height: <br>		
+		<input type="text" id="inputh"/> 
+		<input type="submit" value="Submit" onclick="showData()"/><br>
+
+</form>
+<canvas id="canvas" width="800" height="800"></canvas>
+
+<script>
+var counter = 0;
+var blockSize = 50;
+var width = document.getElementById("inputw").value;
+var height = document.getElementById("inputh").value;
+var tempWidth = width;
+var tempHeight = height;
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+$("#myForm").submit(function(e){
+	e.preventDefault();
+});
+
+const color = new Map();
+color.set('1', "Red");
+color.set('2', "Yellow");
+color.set('3', "Blue");
+color.set('4', "Pink");
+color.set('5', "Green");
+
+var showData = function(){
+	initialSquare();
+	for(var i = 0; i < 10;i++){
+		if(width == height)break;
+		drawSmallerSquare(i);
+	}
+}
+
+var drawSmallerSquare = function(colorNum){
+	if(Number(tempWidth) > Number(tempHeight)){
+		ctx.strokeStyle = color.get(colorNum)
+		ctx.strokeRect((width - tempWidth) * blockSize +5,(height - tempHeight) * blockSize +5,tempHeight * blockSize,tempHeight * blockSize);
+		tempWidth -= tempHeight;
+	}else{
+		ctx.strokeStyle = color.get(colorNum)
+		ctx.strokeRect((width - tempWidth) * blockSize +5,(height - tempHeight) * blockSize +5,tempWidth * blockSize,tempWidth * blockSize);
+		tempHeight -= tempWidth;
+	}
+}
+
+var initialSquare = function () {
+width = document.getElementById("inputw").value;
+height = document.getElementById("inputh").value;
+tempWidth = width;
+tempHeight = height;
+ctx.lineWidth = 5;
+ctx.strokeStyle = "Black"
+ctx.strokeRect(5,5,width * blockSize,height * blockSize);
+}
+</script>
+<header>
+
+</header>
+
+</body>
+</html>
