@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+ <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <script src="textbox.js" type="text/javascript"></script>
+</head>
+<body>
+
+
+
+
+
+
+
+ <script>
+	//army of Aliens wants to march, no one of them can face another (NOT<<<<><<<<<<>>>>>)(BUT <<<<<<<>>>>>>>>>>>>)
+ 
+ 
+ 
+ 
+
+function showData(){
+	var numberOfCycles = 0;
+	var numberOfTurns = 0;
+	var Positions = document.getElementById("input").value;   //reads Input
+	console.log(Positions + ".    //the starting formation")
+	
+	const count = (str) => {                                //counts number of matches
+	const re = /></g 
+	return ((str || '').match(re) || []).length
+	}
+	
+	for(var i = 0;   count(Positions)  > 0 || i > 1000;i++){
+		console.log(Positions.replaceAll('><', '<>'));          //outputs each step in console
+		numberOfTurns += count(Positions);                     // counts and adds the total turns needed for this cycle to the total amount of turns
+		Positions = Positions.replaceAll('><', '<>');          // replaces the '><' to '<>'
+		numberOfCycles++;                                      // adds 1 to the cycle after completed
+	}
+	if(0 == count(Positions)){
+		document.writeln("The Number of Cycles are: " + numberOfCycles + "<br>" + "The Number of Turns are: " + numberOfTurns) // outputs the answer
+	}
+}	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ </script>
+ 
+ 
+ 
+ 
+ 
+<form name="myform" action="" method="get">
+    Input: <br>
+<input type="text" id="input"/> <br>
+<input type="button" name="button" value="Submit" onclick="showData()"/>
+</form>
+ 
+</body>
