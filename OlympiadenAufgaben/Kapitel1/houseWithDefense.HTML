@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+ <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <script src="textbox.js" type="text/javascript"></script>
+</head>
+<body>
+
+
+
+
+
+
+
+ <script>
+	//a house that is being shot with a two barrel shotgun
+	var targetNumber;
+ 
+ 
+ 
+
+function showData(){
+	var numberOfShots = 0;
+	
+	var input = document.getElementById("input").value;   //reads Input
+	var numOfSides = input.charAt(0);
+	
+	var protectionOnSides  = input.split(" ");         //creates Array with all the information
+	
+	
+	for(var i = 0; i < 10000;i++){
+		var target = findBiggestNum(protectionOnSides);
+		if(target > 1){                                //If the target has mor than 2 hp then shoot it 2x
+			protectionOnSides[targetNumber] -= 2;
+			numberOfShots++;
+		}else if(target == 1){                    //If the Target 1 hp then...
+		
+		
+			if(protectionOnSides[targetNumber + 1] > 0){               //check if the target after the initial target has more than 0 hp and shoots it
+				protectionOnSides[targetNumber + 1] -= 1;
+				protectionOnSides[targetNumber] -= 1;
+				numberOfShots++;
+
+			}else if(protectionOnSides[targetNumber - 1] > 0){      	//check if the target before the initial target has more than 0 hp and shoots it
+				protectionOnSides[targetNumber - 1] -= 1;
+				protectionOnSides[targetNumber] -= 1;
+				numberOfShots++;
+	
+			}else if(protectionOnSides[numOfSides - 1] > 0){         //check if the target before the initial target has more than 0 hp and shoots it, but on the other end if its the first one in Array
+				protectionOnSides[numOfSides - 1] -= 1;
+				protectionOnSides[targetNumber] -= 1;
+				numberOfShots++;
+			
+			}else{
+				protectionOnSides[targetNumber] -= 1;              // shoots if there are no other nearby targets to also shoot
+				numberOfShots++;
+			}
+		}else{
+		document.writeln("The Number of Shots are: " + numberOfShots);
+		return;
+		}
+	}
+}	
+	
+
+function findBiggestNum(array){
+	var biggestNum = 0
+	for(var i = 0; i < array.length; i++){
+		if(array[i] > biggestNum){
+			biggestNum = array[i];
+			targetNumber = i;
+		}
+	}
+	return biggestNum;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+ </script>
+ 
+ 
+ 
+ 
+ 
+<form name="myform" action="" method="get">
+    Input: <br>
+<input type="text" id="input"/> <br>
+<input type="button" name="button" value="Submit" onclick="showData()"/>
+</form>
+ 
+</body>
